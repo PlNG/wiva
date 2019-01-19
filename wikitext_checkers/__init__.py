@@ -155,3 +155,19 @@ def inline_styles(wikitext, validation):
 
     for m in RE.finditer(wikitext):
         validation.add_warning('Inline style looks bad on mobile', m.start(), m.end())
+
+@autoregister
+def link_title_matches_destination(wikitext, validation):
+    CIRE = re.compile(r'\[\[\s*([^\|]+)\s*\|\s*\1\s*\]\]', re.I)
+
+    for m in CIRE.finditer(wikitext):
+        validation.add_warning('Link title matches destination (Case insensitive)', m.start(), m.end())
+    
+    CSRE = re.compile(r'\[\[\s*([^\|]+)\s*\|\s*\1\s*\]\]')
+
+    for m in CSRE.finditer(wikitext):
+        validation.add_error('Link title matches destination (Case sensitive)', m.start(), m.end())
+
+# @autoregister
+# def link_to_disambig(wikitext, validation):
+    
